@@ -25,10 +25,11 @@ public class AccountsService {
 
 	@Getter
 	private final AccountsRepository accountsRepository;
-	
-	//@Getter
-	//Map<String, Transaction> transactionHistory  = new ConcurrentHashMap<String, Transaction>();
-	
+
+	// @Getter
+	// Map<String, Transaction> transactionHistory = new ConcurrentHashMap<String,
+	// Transaction>();
+
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
@@ -36,10 +37,10 @@ public class AccountsService {
 	public AccountsService(AccountsRepository accountsRepository) {
 		this.accountsRepository = accountsRepository;
 	}
-	
+
 	public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
-        this.publisher = publisher;
-    }
+		this.publisher = publisher;
+	}
 
 	public void createAccount(Account account) {
 		this.accountsRepository.createAccount(account);
@@ -51,33 +52,34 @@ public class AccountsService {
 
 	public Account transferAmount(String accountFromId, String accountToId, BigDecimal amount)
 			throws AccountNotPresentException, TransactionException {
-		//log.info("account from : " + accountFromId);
-		//log.info("account to : " + accountToId);
+		log.info("account from : {}", accountFromId);
+		log.info("Account to : {}", accountToId);
+		log.info("Transaction Amount {}", amount);
 
 		if (!isPositive(amount)) {
 			throw new TransactionException("Transaction amount should not be Zero or Negative.");
 		}
 
-		
 		Account fromAccount = getAccount(accountFromId);
 		Account toAccount = getAccount(accountToId);
-		
-		//validate balance after deduction, it should not be in minus.
-		if(!hasSufficientBalance(fromAccount.getBalance().subtract(amount)))
+
+		// validate balance after deduction, it should not be in minus.
+		if (!hasSufficientBalance(fromAccount.getBalance().subtract(amount)))
 			throw new TransactionException("No Sufficient Amount available.");
-		
+
 		try {
 			fromAccount.debit(amount);
 			toAccount.credit(amount);
-			
+
 			String transactionId = UUID.randomUUID().toString();
 			Timestamp transactionTime = Timestamp.from(Instant.now());
-			
-			Transaction transaction = new Transaction(transactionId, fromAccount.getAccountId(),toAccount.getAccountId(),amount,transactionTime);
-			
+
+			Transaction transaction = new Transaction(transactionId, fromAccount.getAccountId(),
+					toAccount.getAccountId(), amount, transactionTime);
+
 			publisher.publishEvent(new TransactionEvent(this, "UPDATE", transaction));
 
-		}catch(Exception e) {
+		} catch (Exception e) {
 			throw new TransactionException(e.getMessage());
 		}
 		return fromAccount;
@@ -86,10 +88,10 @@ public class AccountsService {
 	public boolean isPositive(BigDecimal amount) {
 		boolean isPositive = false;
 		if (amount.compareTo(new BigDecimal(0)) == 1) {
-			//log.info(amount + " is greter than 0.");
+			log.debug(amount + " is greter than 0.");
 			isPositive = true;
 		} else {
-			//log.info(amount + " is less than 0 or 0.");
+			log.debug(amount + " is less than 0 or 0.");
 
 		}
 		return isPositive;
@@ -103,10 +105,11 @@ public class AccountsService {
 		}
 
 	}
+
 	public boolean hasSufficientBalance(BigDecimal balance) {
-		if(balance.compareTo(BigDecimal.ZERO)==0)
+		if (balance.compareTo(BigDecimal.ZERO) == 0)
 			return true;
-		if (isPositive(balance) ) {
+		if (isPositive(balance)) {
 			return true;
 		}
 		return false;

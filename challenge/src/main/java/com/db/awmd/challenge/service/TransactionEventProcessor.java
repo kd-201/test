@@ -13,28 +13,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class TransactionEventProcessor implements ApplicationListener<TransactionEvent> {
-	
+
 	@Getter
-	NotificationService notifyAboutTransfer ;
-	
+	NotificationService notifyAboutTransfer;
+
 	@Getter
 	AccountsRepository accountsRepository;
-	
+
 	public TransactionEventProcessor(NotificationService notifyAboutTransfer, AccountsRepository accountsRepository) {
 		super();
 		this.notifyAboutTransfer = notifyAboutTransfer;
 		this.accountsRepository = accountsRepository;
 	}
-	
-	public void onApplicationEvent(TransactionEvent event) 
-    {
+
+	public void onApplicationEvent(TransactionEvent event) {
 		TransactionEvent transactionEvent = (TransactionEvent) event;
-		log.info("Transaction " + transactionEvent.getEventType() + " with details : " + transactionEvent.getTransaction());
+		log.info("Transaction " + transactionEvent.getEventType() + " with details : "
+				+ transactionEvent.getTransaction());
 
-        Transaction transaction = transactionEvent.getTransaction();
-        notifyAboutTransfer.notifyAboutTransfer(accountsRepository.getAccount(transaction.getFromAccountId()),
-        		transaction.toString());
-    }
-
+		Transaction transaction = transactionEvent.getTransaction();
+		notifyAboutTransfer.notifyAboutTransfer(accountsRepository.getAccount(transaction.getFromAccountId()),
+				transaction.toString());
+	}
 
 }

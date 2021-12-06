@@ -2,16 +2,10 @@ package com.db.awmd.challenge;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
-import com.db.awmd.challenge.domain.Account;
-import com.db.awmd.challenge.domain.Transaction;
-import com.db.awmd.challenge.service.AccountsService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -28,6 +22,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.db.awmd.challenge.domain.Account;
+import com.db.awmd.challenge.domain.Transaction;
+import com.db.awmd.challenge.service.AccountsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

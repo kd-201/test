@@ -1,7 +1,5 @@
 package com.db.awmd.challenge.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -9,9 +7,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Data;
 
 @Data
 public class Account {
